@@ -45,6 +45,7 @@ public class SpringBootPaymentProjectApplication {
 				System.out.println(acc);
 		
 	}
+	Above code has to be executed to get encrypted password to the database
 	*/
 
 }

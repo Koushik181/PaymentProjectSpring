@@ -34,17 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		// TODO Auto-generated method stub
 		auth.userDetailsService(userDetailsService);
 	}
-	/**
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-		auth.inMemoryAuthentication()
-		.withUser("abc").password(encoder().encode("abc")).roles("USER")
-		.and()
-		.withUser("admin").password(encoder().encode("admin")).roles("ADMIN");
-	}
-	*/
-	
-	 
     private static final String[] AUTH_WHITELIST = {
         // -- Swagger UI v2
         "/v2/api-docs",
@@ -56,52 +45,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         "/webjars/**",
         // -- Swagger UI v3 (OpenAPI)
         "/v3/api-docs/**",
-        "/swagger-ui/**",
-        "/","/products/**","/actuator/**"
-        , "/admin/**","/register","/test"
+        "/swagger-ui/**"
         // other public endpoints of your API may be appended to this array
 };
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/**
-		 * Disable CSRF and authorize any other requests using form based authentication
-		 */
-		//http.csrf().disable()
-		//.authorizeRequests().anyRequest().authenticated()
-		//.and().formLogin().and().logout();
 		
-		/**
-		 * Disable CSRF and permit the urls passed without authentication
-		 * and authorize any other requests using form based authentication.
-		 
-		 */
-		//http.csrf().disable()
-		//.authorizeRequests().antMatchers(HttpMethod.GET,"/","/products/**").permitAll()
-		//.anyRequest().authenticated()
-		//.and().formLogin().and().logout();
-		
-		/**
-		 * 
-		 * Disable CSRF and permit the urls passed without authentication
-		 * and permit few urls for admin and user 
-		 * and permit only few urls for admin
-		 * and authorize any other requests using form based authentication.
-		 */
-		
-		//spring mvc
-		//http.csrf().disable()
-		//whitelist array for all
-		//.authorizeRequests().antMatchers(HttpMethod.GET,AUTH_WHITELIST).permitAll()
-		//.and()
-		//.authorizeRequests()
-		//.antMatchers("/invoices/**", "/sigin","/dashboard","/invoice")
-		//.hasAnyRole("USER","ADMIN")
-		//.antMatchers(HttpMethod.POST,"/products").hasAnyRole("ADMIN")
-		//.antMatchers("/user").hasAnyRole("ADMIN")
-		//.anyRequest().authenticated().and()
-		//.formLogin().and().logout();
-		
-
 		// jwt
 		 http.csrf().disable()
 		.authorizeRequests()//whitelist
@@ -111,10 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 		.permitAll()
 		.and()
 		.authorizeRequests()
-		.antMatchers("/message", "/swagger-ui.html")
+		.antMatchers("/messages", "/swagger-ui.html")
 		.permitAll()
-		.antMatchers(HttpMethod.POST,"/transaction").hasAnyRole("ADMIN")
-		.antMatchers("/user").permitAll()
 		.anyRequest().authenticated()
 		.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.disable().cors();

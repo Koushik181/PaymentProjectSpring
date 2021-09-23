@@ -58,43 +58,6 @@ public class LoginRestController {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@PostMapping("/login")
-	public ResponseEntity<Object> getLoginValidation(@RequestBody Customer customer) {
-		List<Customer> cstList =  new ArrayList<>();
-		try {
-			 cstList = this.customerService.findCustomerByUsername(customer.getUserName());
-			 if((!(cstList.size()>0)) ||!cstList.get(0).getUserPassword().equals(customer.getUserPassword()) ) {
-		
-					throw new EntityNotFoundException();
-			 }
-		}
-		catch(Exception e )
-		{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Not found");
-		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-				cstList.get(0));
-	
-	}
-	
-	@PostMapping("/login1")
-	public Customer getLoginValidation1(@RequestBody Customer customer) {
-		List<Customer> cstList =  new ArrayList<>();
-		try {
-			 cstList = this.customerService.findCustomerByUsername(customer.getUserName());
-			 if((!(cstList.size()>0)) ||!cstList.get(0).getUserPassword().equals(customer.getUserPassword()) ) {
-		
-					throw new EntityNotFoundException();
-			 }
-		}
-		catch(Exception e )
-		{
-			return null;
-		}
-		return cstList.get(0);
-	
-	}
-	
 	@PostMapping("/getBankNameFromBIC")
 	public ResponseEntity<Object> getBankNameByBic(@RequestBody Bank recevierData) {
 		Bank bank = null;
@@ -220,31 +183,13 @@ public class LoginRestController {
 		}
 		catch(Exception e )
 		{
-			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not retrieve transfer types");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponsePage(400, e.getMessage()));
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(transferTypesList);
 	}
 	
 	
 	
-	@GetMapping("/login/{username}/{password}")
-	public ResponseEntity<ResponsePage> getLoginValidation(@PathVariable String username,@PathVariable String password) {
-		List<Customer> cstList =  new ArrayList<>();
-		try {
-			 cstList = this.customerService.findCustomerByUsername(username);
-			 if((!(cstList.size()>0)) ||!cstList.get(0).getUserPassword().equals(password) ) {
-		
-					throw new EntityNotFoundException();
-			 }
-		}
-		catch(Exception e )
-		{
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponsePage(400, e.getMessage()));
-		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponsePage(200, 
-				"found"));
-	
-	}
 	@GetMapping("/customer/{customerid}")
 	public ResponseEntity<ResponsePage> getCustomerDetails(@PathVariable String customerid)
 	{ 
@@ -256,25 +201,8 @@ public class LoginRestController {
 		{
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponsePage(400, e.getMessage()));
 		}
-		//return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponsePage(200, 
-			//	customer.getAccountHolderName()+" "+customer.getClearBalance()));
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponsePage(200, 
 				customer.toString()));
-	}
-	@GetMapping("/test")
-	public Customer getCustomerDetails1()
-	{ 
-		 Customer customer = null;
-		try {
-			 customer = this.customerService.findCustomerById("71319440983198");
-		}
-		catch(Exception e )
-		{
-			return null;
-		}
-		//return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ResponsePage(200, 
-			//	customer.getAccountHolderName()+" "+customer.getClearBalance()));
-		return customer;
 	}
 	
 	@GetMapping("/bank/{bic}")
@@ -302,24 +230,9 @@ public class LoginRestController {
 		}
 		catch(Exception e )
 		{
-			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not retrieve transfer types");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponsePage(400, e.getMessage()));
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(messagesList);
 	}
 	
-	/*
-	@GetMapping("/messages")
-	public List<Message> getMessages()
-	{ 
-		return this.messageService.getAllMessages();
-	}
-	*/
-	
-	@GetMapping("/currency")
-	public List<Currency> getAllCurrencies()
-	{ 
-		return this.currencyService.getAllCurrencies();
-	}
-	
-
 }
